@@ -43,7 +43,7 @@ J = (1/m) * sum( -y .* log(sigmoid(X * theta)) - (1 - y) .* log(1-sigmoid(X * th
 
 grad_non_reg = (1/m) .* sum( bsxfun(@minus, ...
                            bsxfun(@times,repmat(sigmoid(X * theta),1,length(theta)),X), ...
-                           bsxfun(@times, X, y)));
+                           bsxfun(@times, X, y)), 1);
                        
 grad(1) =  grad_non_reg(1).';                     
 
