@@ -23,7 +23,9 @@ sigma = 0.3;
 %        mean(double(predictions ~= yval))
 %
 
-C_out = 10000000;
+error = 10e+10000000;
+C_out = 10e+10000000;
+sigma_out = 10e+10000000;
 
 C_vect = [0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30];
 sigma_vect = [0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30];
@@ -33,11 +35,23 @@ for ic = 1:length(C_vect)
     
     for isigma = 1:length(sigma_vect)
         sigma_temp = sigma_vect(isigma);
+        
+        model= svmTrain(X, y, C_temp, @(x1, x2) gaussianKernel(x1, x2, sigma_temp));
+        predictions = svmPredict(model, Xval);
+        error_temp = mean(double(predictions ~= yval));
+        
+        if error_temp < error
+            C_out = C_temp;
+            sigma_out = sigma_temp;
+            error = error_temp;
+        end
+        
     end
     
 end
 
-
+C = C_out;
+sigma = sigma_out;
 
 
 % =========================================================================
